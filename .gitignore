@@ -6,7 +6,6 @@ venv/
 *-ubyte
 *.mat
 temp*
-params/
 data/
 results/
 *.bmp
@@ -23,16 +22,7 @@ results/
 *.pdf
 *~
 test*
-*.md
-paper/.*
 *.dvi
 *.fig
 *.brf
-pre_work/
-results/
-latexsource/
-supplementary/
-GALA/
-dec/
-SDCN/
 
