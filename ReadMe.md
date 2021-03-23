@@ -17,8 +17,11 @@ python run.py
 ```
 ### Requirements 
 pytorch 1.3.1
+
 scipy 1.3.1
+
 scikit-learn 0.21.3
+
 numpy 1.16.5
 
 ## Citation
