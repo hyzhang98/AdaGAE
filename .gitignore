@@ -6,7 +6,6 @@ venv/
 *-ubyte
 *.mat
 temp*
-data/
 results/
 *.bmp
 *.png
