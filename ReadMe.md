@@ -3,7 +3,7 @@
 
 This repository is our implementation of 
 
-[Xuelong Li, Hongyuan Zhang, and R. Zhang, "Adaptive Graph Auto-Encoder for General Data Clustering," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 2021](https://ieeexplore.ieee.org/document/9606581).
+[Xuelong Li, Hongyuan Zhang, and Rui Zhang, "Adaptive Graph Auto-Encoder for General Data Clustering," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 2021](https://ieeexplore.ieee.org/document/9606581).
 
 
 
