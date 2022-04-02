@@ -3,7 +3,7 @@
 
 This repository is our implementation of 
 
-[Xuelong Li, Hongyuan Zhang, and R. Zhang, "Adaptive Graph Auto-Encoder for General Data Clustering," *arXiv preprint arXiv:2002.08648*, 2020](https://arxiv.org/abs/2002.08648).
+[Xuelong Li, Hongyuan Zhang, and Rui Zhang, "Adaptive Graph Auto-Encoder for General Data Clustering," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 2021](https://ieeexplore.ieee.org/document/9606581).
 
 
 
@@ -23,18 +23,25 @@ python run.py
 ```
 ### Requirements 
 pytorch 1.3.1
+
 scipy 1.3.1
+
 scikit-learn 0.21.3
+
 numpy 1.16.5
 
 ## Citation
 
 ```
 @article{AdaGAE,
-  title={Adaptive Graph Auto-Encoder for General Data Clustering},
   author={Li, Xuelong and Zhang, Hongyuan and Zhang, Rui},
-  journal={arXiv preprint arXiv:2002.08648},
-  year={2020}
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={Adaptive Graph Auto-Encoder for General Data Clustering}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={1-1},
+  doi={10.1109/TPAMI.2021.3125687}
 }
 
 ```
