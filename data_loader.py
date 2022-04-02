@@ -1,25 +1,16 @@
 import scipy.io as scio
 import numpy as np
 
-YALE = 'Yale'
 UMIST = 'UMIST'
-ORL = 'ORL'
 COIL20 = 'COIL20'
-YALEB_SDSIFT = 'YaleB_DSIFT'
 JAFFE = 'JAFFE'
-MNIST_DSIFT = 'mnist_DSIFT'
 PALM = 'Palm'
 USPS = 'USPSdata_20_uni'
-TOY_THREE_RINGS = 'three_rings'
 MNIST_TEST = 'mnist_test'
-YEAST = 'yeast_uni'
 SEGMENT = 'segment_uni'
 NEWS = '20news_uni'
-WEBK = 'WebKB_wisconsin_uni'
 TEXT = 'text1_uni'
-GLASS = 'glass_uni'
 ISOLET = 'Isolet'
-CORA = 'cora'
 
 
 def load_cora():

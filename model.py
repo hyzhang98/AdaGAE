@@ -16,7 +16,7 @@ class GAE(torch.nn.Module):
             self.layers = [X.shape[1], 256, 64]
         self.device = device
         if self.device is None:
-            self.torch.device('cuda: 0' if torch.cuda.is_available() else 'cpu')
+            self.torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         self.X = X
         self.labels = labels
         self.num_neighbors = num_neighbors
@@ -59,12 +59,10 @@ class GAE(torch.nn.Module):
             loss = self.build_loss(recons, weights)
             loss.backward()
             optimizer.step()
-            # recons = None
             torch.cuda.empty_cache()
             if (i+1) % 50 == 0 or i == 0:
                 print('Iteration-{}, loss={}, '.format(i+1, round(loss.item(), 5)), end=' ')
                 self.clustering((recons.abs() + recons.t().abs()).detach()/2, method=2)
-        # self.clustering((recons.abs() + recons.t().abs()).detach()/2, method=2)
 
     def clustering(self, weights, method=2, raw=False):
         n_clusters = np.unique(self.labels).shape[0]
@@ -137,35 +135,12 @@ class AdaGAE(torch.nn.Module):
         distances = utils.distance(self.embedding.t(), self.embedding.t())
         softmax = torch.nn.Softmax(dim=1)
         recons_w = softmax(-distances)
-        # sparseProb = SparseProb(sparsity=self.num_neighbors)
-        # recons_w = sparseProb(distances)
         return recons_w + 10**-10
-        # return 1 / (distances + 1)
-        # return torch.sigmoid(self.embedding.matmul(torch.t(self.embedding)))
 
     def update_graph(self):
         weights, raw_weights = utils.cal_weights_via_CAN(self.embedding.t(), self.num_neighbors, self.links)  # first
         weights = weights.detach()
         raw_weights = raw_weights.detach()
-        # threshold = 0.5
-        # connections = (recons > threshold).type(torch.IntTensor).cuda()
-        # weights = weights * connections
-        Laplacian = utils.get_Laplacian_from_weights(weights)
-        # Laplacian = utils.get_Laplacian_from_weights(utils.noise(weights))
-        return weights, Laplacian, raw_weights
-
-    def update_graph_entropy(self, recons):
-        size = self.embedding.shape[0]
-        distances = utils.distance(self.embedding.t(), self.embedding.t())
-        distances = self.lam * distances - recons.log()
-        distances = distances.detach()
-        distances = torch.exp(-distances)
-        sorted_distances, _ = distances.sort(dim=1, descending=True)
-        flags = sorted_distances[:, self.num_neighbors].reshape([size, 1])
-        distances[distances <= flags] = 0
-        sums = distances.sum(dim=1).reshape([size, 1])
-        raw_weights = distances / sums
-        weights = (raw_weights + raw_weights.t()) / 2
         Laplacian = utils.get_Laplacian_from_weights(weights)
         return weights, Laplacian, raw_weights
 
@@ -175,6 +150,7 @@ class AdaGAE(torch.nn.Module):
         loss += raw_weights * torch.log(raw_weights / recons + 10**-10)
         loss = loss.sum(dim=1)
         loss = loss.mean()
+        # L2-Regularization
         # loss += 10**-3 * (torch.mean(self.embedding.pow(2)))
         # loss += 10**-3 * (torch.mean(self.W1.pow(2)) + torch.mean(self.W2.pow(2)))
         # loss += 10**-3 * (torch.mean(self.W1.abs()) + torch.mean(self.W2.abs()))
@@ -188,7 +164,6 @@ class AdaGAE(torch.nn.Module):
         Laplacian = utils.get_Laplacian_from_weights(weights)
         Laplacian = Laplacian.to_sparse()
         torch.cuda.empty_cache()
-        # Laplacian = utils.get_Laplacian_from_weights(utils.noise(weights))
         print('Raw-CAN:', end=' ')
         self.clustering(weights, k_means=False)
         optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
@@ -209,8 +184,6 @@ class AdaGAE(torch.nn.Module):
             # scio.savemat('results/embedding_{}.mat'.format(epoch), {'Embedding': self.embedding.cpu().detach().numpy()})
             if self.num_neighbors < self.max_neighbors:
                 weights, Laplacian, raw_weights = self.update_graph()
-                # weights, Laplacian, raw_weights = self.update_graph_entropy(recons)
-                # self.clustering(weights, k_means=False)
                 acc, nmi = self.clustering(weights, k_means=True, SC=True)
                 self.num_neighbors += self.inc_neighbors
             else:
@@ -224,7 +197,6 @@ class AdaGAE(torch.nn.Module):
                 w, _, __ = self.update_graph()
                 _, __ = (None, None)
                 torch.cuda.empty_cache()
-                # w, _, __ = self.update_graph_entropy(recons)
                 acc, nmi = self.clustering(w, k_means=False)
                 weights = weights.to(self.device)
                 raw_weights = raw_weights.to(self.device)
@@ -257,27 +229,6 @@ class AdaGAE(torch.nn.Module):
         return acc, nmi
 
 
-class SparseProb(torch.nn.Module):
-    def __init__(self, sparsity):
-        super().__init__()
-        self.sparsity = sparsity
-
-    def forward(self, distances):
-        """
-        :param distances: n * n
-        :return:
-        """
-        size = distances.shape[0]
-        sorted_distances, _ = distances.sort(dim=1)
-        top_k = sorted_distances[:, self.sparsity]
-        top_k = torch.t(top_k.repeat(size, 1)) + 10 ** -10
-
-        sum_top_k = torch.sum(sorted_distances[:, 0:self.sparsity], dim=1)
-        sum_top_k = torch.t(sum_top_k.repeat(size, 1))
-        prob = torch.div(top_k - distances, self.sparsity * top_k - sum_top_k)
-        return prob.relu()
-
-
 def get_weight_initial(shape):
     bound = np.sqrt(6.0 / (shape[0] + shape[1]))
     ini = torch.rand(shape) * 2 * bound - bound
@@ -296,14 +247,8 @@ if __name__ == '__main__':
     X = torch.Tensor(data).to(mDevice)
     if dataset is loader.USPS:
         layers = [input_dim, 128, 64]
-    elif dataset is loader.TOY_THREE_RINGS:
-        layers = [input_dim, 3, 2]
     elif dataset is loader.SEGMENT:
         layers = [input_dim, 10, 7]
-    elif dataset is loader.GLASS:
-        layers = [input_dim, 7, 5]
-    elif dataset is loader.CORA:
-        layers = [input_dim, 1600, 400]
     else:
         layers = [input_dim, 256, 64]
     for neighbor in [5, 10, 20]:

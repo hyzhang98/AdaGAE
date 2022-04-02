@@ -7,6 +7,12 @@ This repository is our implementation of
 
 
 
+The core idea of AdaGAE is to **use GNN to improve graph-based clustering methods on the general data**. The performance bottleneck is the **collapse caused by the simple update of constructed graph**, which is formally proved in the paper. 
+
+The general data is defined as the data point only represented by an $d$-dimension vector. Unlike image data and text data, the general data does not require the order of features. It also needs no prior relations of features or samples/nodes (*i.e.*, links), like graph data. 
+
+
+
 If you have issues, please email:
 
 hyzhang98@gmail.com.
@@ -32,5 +38,4 @@ numpy 1.16.5
 }
 
 ```
-
 

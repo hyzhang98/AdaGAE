@@ -22,11 +22,9 @@ def distance(X, Y, square=True):
 
     crossing_term = torch.t(X).matmul(Y)
     result = x + y - 2 * crossing_term
-    # result = result.max(torch.zeros(result.shape).cuda())
     result = result.relu()
     if not square:
         result = torch.sqrt(result)
-    # result = torch.max(result, result.t())
     return result
 
 
