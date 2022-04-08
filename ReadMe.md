@@ -7,9 +7,13 @@ This repository is our implementation of
 
 
 
-The core idea of AdaGAE is to **use GNN to improve graph-based clustering methods on the general data**. The performance bottleneck is the **collapse caused by the simple update of constructed graph**, which is formally proved in the paper. 
+The core idea of AdaGAE is to **use GNN to improve graph-based clustering methods on the general data**. The performance bottleneck is the **collapse caused by the simple update of constructed graph**, which is formally proved in the paper and shown in the following figure. The first line is the illustration of UMIST and the second line is the one of USPS. Clearly, **similar points are aggregated properly**.
 
-The general data is defined as the data point only represented by an $d$-dimension vector. Unlike vision-data and text-data, the general data does not require the order of features. It also needs no prior relations of features or samples/nodes (*i.e.*, links), like graph data. 
+![illustration](illustration.jpg)
+
+
+
+**Remark:** The general data is defined as the data point only represented by an *d*-dimension vector. Unlike vision-data and text-data, the general data does not require the order of features. It also needs no prior relations of features or samples/nodes (*i.e.*, links), like graph data. **Overall, we attempt to design models that can be applied to various types of data**.
 
 
 

@@ -6,10 +6,6 @@ venv/
 *-ubyte
 *.mat
 temp*
-results/
-*.bmp
-*.png
-*.jpg
 *.log
 *.zip
 *.out
