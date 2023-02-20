@@ -1,4 +1,4 @@
-# Adaptive Graph Auto-Encoder for General Data Clustering
+# Adaptive Graph Auto-Encoder for General Data Clustering ![visitors](https://visitor-badge.glitch.me/badge?page_id=page.id&left_color=green&right_color=red)
 
 
 This repository is our implementation of 
