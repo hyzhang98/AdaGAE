@@ -7,9 +7,9 @@ import numpy as np
 warnings.filterwarnings('ignore')
 
 
-dataset = loader.UMIST
+dataset = loader.BALSAC
 [data, labels] = loader.load_data(dataset)
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cpu') # torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 X = torch.Tensor(data).to(device)
 input_dim = data.shape[1]
 layers = None

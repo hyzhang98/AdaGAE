@@ -11,6 +11,7 @@ SEGMENT = 'segment_uni'
 NEWS = '20news_uni'
 TEXT = 'text1_uni'
 ISOLET = 'Isolet'
+BALSAC = 'balsac'
 
 
 def load_cora():
