@@ -6,10 +6,11 @@ import numpy as np
 
 warnings.filterwarnings('ignore')
 
+import pickle as pkl
 
 dataset = loader.BALSAC
 [data, labels] = loader.load_data(dataset)
-device = torch.device('cpu') # torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 X = torch.Tensor(data).to(device)
 input_dim = data.shape[1]
 layers = None
@@ -29,3 +30,6 @@ for lam in np.power(2.0, np.array(range(-10, 10, 2))):
     nmis.append(nmi)
 print(accs)
 print(nmis)
+
+with open('X.pkl', 'wb') as outfile:
+    pkl.dump(gae.embedding, outfile)
