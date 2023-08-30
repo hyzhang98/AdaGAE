@@ -55,7 +55,7 @@ def cal_weights_via_CAN(X, num_neighbors, links=0):
     sum_top_k = None
     torch.cuda.empty_cache()
     weights = weights.relu().cpu()
-    if links is not 0:
+    if links != 0:
         links = torch.Tensor(links).cuda()
         weights += torch.eye(size).cuda()
         weights += links

@@ -217,7 +217,7 @@ class AdaGAE(torch.nn.Module):
             degree = torch.sum(weights, dim=1).pow(-0.5)
             L = (weights * degree).t() * degree
             L = L.cpu()
-            _, vectors = L.symeig(True)
+            _, vectors = torch.linalg.eigh(L)
             indicator = vectors[:, -n_clusters:]
             indicator = indicator / (indicator.norm(dim=1)+10**-10).repeat(n_clusters, 1).t()
             indicator = indicator.cpu().numpy()
